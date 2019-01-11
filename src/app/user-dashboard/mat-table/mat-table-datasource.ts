@@ -1,29 +1,23 @@
-import { DataSource } from '@angular/cdk/collections';
+import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { map } from 'rxjs/operators';
-import { Observable, of as observableOf, merge } from 'rxjs';
+import { Observable, of as observableOf, merge, BehaviorSubject } from 'rxjs';
 import { CrudServiceService } from 'src/app/services/crud-service.service';
 import {MatTableItem} from './MatTableItemModel'
 
-
-// const EXAMPLE_DATA: MatTableItem[];
 /**
  * Data source for the MatTable view. This class should
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
 export class MatTableDataSource extends DataSource<MatTableItem> {
-  data: MatTableItem[];
-  logService : CrudServiceService;
-
+  data: MatTableItem[];  
   constructor(private paginator: MatPaginator, private sort: MatSort, private crudService: CrudServiceService) {
     super();
-    //  this.data = crudService.getLogRecord();
-    crudService.getLogRecord()
-      .subscribe(testData=>{ 
-         console.log(testData);  
-       this.data = testData;
-      }); 
+    this.crudService.getLogRecord()
+        .subscribe(testData=>{
+              this.data = <MatTableItem[]>testData;
+        }); 
   }
 
   /**
@@ -31,20 +25,12 @@ export class MatTableDataSource extends DataSource<MatTableItem> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<MatTableItem[]> {
-    // Combine everything that affects the rendered data into one update
-    // stream for the data-table to consume.
-    
-
+  connect(collectionViewer: CollectionViewer): Observable<MatTableItem[]> {   
     const dataMutations = [
-      observableOf(this.data),
+      observableOf(...this.data),
       this.paginator.page,
       this.sort.sortChange
     ];
-
-    // Set the paginator's length
-    this.paginator.length = this.data.length;
-
     return merge(...dataMutations).pipe(map(() => {
       return this.getPagedData(this.getSortedData([...this.data]));
     }));
@@ -54,7 +40,7 @@ export class MatTableDataSource extends DataSource<MatTableItem> {
    *  Called when the table is being destroyed. Use this function, to clean up
    * any open connections or free any held resources that were set up during connect.
    */
-  disconnect() {}
+  disconnect(collectionViewer: CollectionViewer) {}
 
   /**
    * Paginate the data (client-side). If you're using server-side pagination,
@@ -75,7 +61,7 @@ export class MatTableDataSource extends DataSource<MatTableItem> {
     }
 
     return data.sort((a, b) => {
-      const isAsc = this.sort.direction === 'asc';
+      const isAsc = this.sort.direction === 'desc';
       switch (this.sort.active) {
         case 'id': return compare(a.id, b.id, isAsc);
         case 'date': return compare(a.date, b.date, isAsc);

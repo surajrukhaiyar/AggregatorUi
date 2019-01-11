@@ -6,7 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule, MatPaginatorModule, MatSortModule, MatToolbarModule,
-       MatButtonModule, MatInputModule, MatSidenavModule, MatIconModule, MatListModule, MatOptionModule, MatSelectChange, MatSelectModule} from '@angular/material';
+       MatButtonModule, MatInputModule, MatSidenavModule, MatIconModule, MatListModule, MatOptionModule, MatSelectModule} from '@angular/material';
 import { LayoutModule } from '@angular/cdk/layout';
 
 import { MatNavComponent } from './mat-nav/mat-nav.component';
