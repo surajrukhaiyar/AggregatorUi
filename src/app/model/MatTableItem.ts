@@ -1,7 +1,11 @@
+import { Transaction } from "./Transaction";
+
 export interface MatTableItem {
-    id: number;
-    status:string;
-    user:string;
-    date:string;
+    id: string;
+    name: string;
     userSystem:string;
+    user:string;
+    status:string;
+    date:string;
+    transactions:Transaction[];
   }

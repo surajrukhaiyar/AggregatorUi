@@ -1,0 +1,29 @@
+<div style="text-align:center">
+  <circle-progress
+    [percent]="percent"
+    [maxPercent]="100"
+    [toFixed]="0"
+    [showTitle]="true"
+    [showUnits]="false"
+    [showSubtitle]="true"
+    [showImage]="false"
+    [showBackground]="true"
+    [showInnerStroke]="true"
+    [clockwise]="true"
+    [responsive]="false"
+    [startFromZero]="true"
+  ></circle-progress>
+</div>
+
+<div mat-dialog-content>
+      <div style="font-weight: 500;">Application : {{data?.pName}} : {{data?.status}} : {{data?.dateTime}}</div> 
+      <div *ngFor="let t of data?.transactions">
+          Workflow : {{t.tName}} : {{t.tStatus}} : {{t.dateTime}}
+          <ul *ngFor="let i of t?.inputData">
+            {{i.varName}} : {{i.varValue}}
+          </ul>
+      </div>
+</div>
+
+
+{{rowId}}

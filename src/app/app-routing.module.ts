@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { StatusComponent } from './status-form/status/status.component'
 import { UserSignUpComponent } from './user-sign-up/user-sign-up.component';
+import { MatTableComponent } from './mat-table/mat-table.component';
+import { WfDetailDialogComponent } from './wf-detail-dialog/wf-detail-dialog.component';
 
 const routes: Routes = [
   { 
@@ -19,8 +21,14 @@ const routes: Routes = [
   },
   {
     path: 'userdashboard',
-    loadChildren: './user-dashboard/user-dashboard.module#UserDashboardModule'
-  } 
+    component: MatTableComponent
+  },{
+    path:'wfDetail',
+    component:WfDetailDialogComponent
+  },{
+    path:'wfDetail/:rowId',
+    component:WfDetailDialogComponent
+  }
 ];
 
 @NgModule({

@@ -28,23 +28,26 @@ export class StatusComponent implements OnInit {
   }
 
 
-  onSubmit() {
-    this.submitted = true;
-    if (this.profileForm.invalid) {
-      return;
-    }
-    this.msgService.clear();
-    this.loginService.getAuthToken(this.profileForm.value)
-        .subscribe(res => {
-            this.userToken = <JWTtoken>res;
-            this.success = true;
-            sessionStorage.setItem("authToken","Token " + this.userToken.token);
-            if(this.msgService.messages.length == 0){
-              this.router.navigate(['/userdashboard'])
-            }
-        });
-  }
+  // onSubmit() {
+  //   this.submitted = true;
+  //   if (this.profileForm.invalid) {
+  //     return;
+  //   }
+  //   this.msgService.clear();
+  //   this.loginService.getAuthToken(this.profileForm.value)
+  //       .subscribe(res => {
+  //           this.userToken = <JWTtoken>res;
+  //           this.success = true;
+  //           sessionStorage.setItem("authToken","Token " + this.userToken.token);
+  //           if(this.msgService.messages.length == 0){
+  //             this.router.navigate(['/userdashboard'])
+  //           }
+  //       });
+  // }
 
+  onSubmit() {
+      this.router.navigate(['/userdashboard'])
+  }
   newUser(){
     this.router.navigate(['/signUp'])
   }

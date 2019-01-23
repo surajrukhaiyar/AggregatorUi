@@ -1,19 +1,3 @@
-<div style="text-align:center">
-  <circle-progress
-    [percent]="60"
-    [maxPercent]="1000"
-    [toFixed]="0"
-    [showTitle]="true"
-    [showUnits]="false"
-    [showSubtitle]="true"
-    [showImage]="false"
-    [showBackground]="true"
-    [showInnerStroke]="false"
-    [clockwise]="true"
-    [responsive]="false"
-    [startFromZero]="true"
-  ></circle-progress>
-</div>
 <div style="text-align:right;  margin-right: 10%;">
     <button type="button" mat-fab color="warn" (click)="logout()">
         <i class="material-icons">
@@ -24,14 +8,13 @@
 <div class="mat-elevation-z8">
   <mat-table class="full-width-table" [dataSource]="dataSource" matSort aria-label="Elements">
     
-      <ng-container matColumnDef="id">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.pName}}</mat-cell>
       </ng-container>
-  
-      <ng-container matColumnDef="status">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>Staus</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.status}}</mat-cell>
+      <ng-container matColumnDef="userSystem">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>System</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.userSystem}}</mat-cell>
       </ng-container>
   
       <ng-container matColumnDef="user">
@@ -39,16 +22,25 @@
         <mat-cell *matCellDef="let row">{{row.user}}</mat-cell>
       </ng-container>
   
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.status}}</mat-cell>
+      </ng-container>
+
       <ng-container matColumnDef="date">
         <mat-header-cell *matHeaderCellDef mat-sort-header>Date</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.date}}</mat-cell>
+        <mat-cell *matCellDef="let row">{{row.dateTime}}</mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="userSystem">
-        <mat-header-cell *matHeaderCellDef mat-sort-header>System</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{row.userSystem}}</mat-cell>
+      <ng-container matColumnDef="wfDetails">
+        <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+          <mat-cell *matCellDef="let row;">
+            <button mat-icon-button color="primary" (click)="viewApplicationDetails(row)">
+                <mat-icon>view_column</mat-icon>
+            </button>
+          </mat-cell>
       </ng-container>
-
+    
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
