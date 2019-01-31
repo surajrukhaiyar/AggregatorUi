@@ -15,15 +15,26 @@
   ></circle-progress>
 </div>
 
-<div mat-dialog-content>
-      <div style="font-weight: 500;">Application : {{data?.pName}} : {{data?.status}} : {{data?.dateTime}}</div> 
-      <div *ngFor="let t of data?.transactions">
-          Workflow : {{t.tName}} : {{t.tStatus}} : {{t.dateTime}}
-          <ul *ngFor="let i of t?.inputData">
-            {{i.varName}} : {{i.varValue}}
-          </ul>
-      </div>
+<div>
+    <mat-table class="full-width-table" [dataSource]="transactionDS" aria-label="Elements">
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef>Wf Name</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.tName}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.tStatus}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="dateTime">
+          <mat-header-cell *matHeaderCellDef>Date</mat-header-cell>
+          <mat-cell *matCellDef="let row">{{row.dateTime}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="varData">
+          <mat-header-cell *matHeaderCellDef [style.display]="'none'">Var Data</mat-header-cell>
+          <mat-cell *matCellDef="let row" [style.display]="'none'">
+        </mat-cell>
+        </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
 </div>
-
-
-{{rowId}}

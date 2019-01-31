@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatPaginator, MatSort, MatDialog } from '@angular/material';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { MatPaginator, MatSort, MatDialog, MatPaginatorIntl } from '@angular/material';
 import { MatTableDataSource } from './mat-table-datasource';
 import { CrudServiceService } from 'src/app/services/crud-service.service';
 import { Router } from '@angular/router';
+import { MatTableItem } from '../model/MatTableItem';
 
 @Component({
   selector: 'app-mat-table',
@@ -12,7 +13,6 @@ import { Router } from '@angular/router';
 export class MatTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild('filter') filter: ElementRef;
   dataSource: MatTableDataSource;
   displayedColumns = ['name', 'userSystem', 'user', 'status', 'date', 'wfDetails'];
   
@@ -22,27 +22,29 @@ export class MatTableComponent implements OnInit {
   }
 
   constructor(private crudServiceParam : CrudServiceService,
-                   private router: Router, private dialog: MatDialog){}
-  // refresh(){
-  //   setInterval(() => {
-  //     this.dataSource = new MatTableDataSource(this.paginator, this.sort, this.crudServiceParam);
-  //   }, 1000);
-  // }
-
+                   private router: Router){}
+ 
   refresh(){
     setInterval(() => {
-      this.paginator._changePageSize(this.paginator.pageSize);
+      this.updataData();
+      this.dataSource._filterChange.next("");
     },1000);
   }
 
   viewApplicationDetails(row){
     this.crudServiceParam.rowData = row;
-    this.router.navigate(['/wfDetail'],{ queryParams: { rowId: row.id }});
+    this.router.navigate(['/wfDetail'],{ queryParams: { rowId: row.processId }});
   }
-
 
   logout(){
     sessionStorage.setItem("authToken", "");
     this.router.navigate(['/updateStatus'])
+  }
+
+  updataData(){
+    this.crudServiceParam.getLogRecord()
+    .subscribe(logData=>{
+          this.dataSource.data = <MatTableItem[]>logData;
+    });
   }
 }

@@ -64,7 +64,10 @@ import { WfDetailDialogComponent } from './wf-detail-dialog/wf-detail-dialog.com
   entryComponents: [
     WfDetailDialogComponent
   ],
-  providers: [HttpErrorHandler,MessageService],
+  providers: [
+      HttpErrorHandler,
+      MessageService
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

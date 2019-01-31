@@ -4,7 +4,6 @@ import { User } from '../model/user';
 import { Observable } from 'rxjs';
 import { MatTableItem } from '../model/MatTableItem'
 import { HttpErrorHandler, HandleError } from '../http-error-handler.service';
-import { JWTtoken } from '../model/JWTtoken';
 import { catchError } from 'rxjs/operators';
 
 const httpOptions = {

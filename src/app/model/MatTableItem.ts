@@ -6,6 +6,6 @@ export interface MatTableItem {
     userSystem:string;
     user:string;
     status:string;
-    date:string;
+    dateTime:string;
     transactions:Transaction[];
   }

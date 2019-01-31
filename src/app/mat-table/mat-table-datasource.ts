@@ -1,27 +1,32 @@
 import { DataSource, CollectionViewer } from '@angular/cdk/collections';
 import { MatPaginator, MatSort } from '@angular/material';
 import { map } from 'rxjs/operators';
-import { Observable, of as observableOf, merge, BehaviorSubject } from 'rxjs';
+import { Observable, of as observableOf, merge, BehaviorSubject, Subject } from 'rxjs';
 import { CrudServiceService } from 'src/app/services/crud-service.service';
 import { MatTableItem } from '../model/MatTableItem';
-
 
 /**
  * Data source for the MatTable view. This class should
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
+
 export class MatTableDataSource extends DataSource<MatTableItem> {
   data: MatTableItem[];  
-  _filterChange = new BehaviorSubject('');
+  _filterChange = new Subject();
+  set filter(filter: string) { this._filterChange.next(filter); }
 
   constructor(private paginator: MatPaginator, private sort: MatSort, private crudService: CrudServiceService) {
     super();
     this.crudService.getLogRecord()
-        .subscribe(testData=>{
-              this.data = <MatTableItem[]>testData;
-        }); 
-        // this._filterChange.subscribe(() => this.paginator.pageIndex = 0)
+    .subscribe(logData=>{
+          this.data = <MatTableItem[]>logData;
+    });
+    if(this.sort!= undefined){
+      this.sort.active = 'date';
+      this.sort.direction = 'desc';
+    }
+    this._filterChange.subscribe();
   }
 
   /**
@@ -29,19 +34,17 @@ export class MatTableDataSource extends DataSource<MatTableItem> {
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
+
   connect(collectionViewer: CollectionViewer): Observable<MatTableItem[]> {   
     const dataMutations = [
       observableOf(...this.data),
-      // this._filterChange,
+      this._filterChange,
       this.paginator.page,
       this.sort.sortChange
     ];
     return merge(...dataMutations).pipe(map(() => {
-      // this.filteredData = this.data.slice().filter((item :MatTableItem)=>{
-      //   const searchStr = item.id;
-      //   return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
-      // })
-      return this.getPagedData(this.getSortedData([...this.data]));
+      let mergedData = this.getFilteredData(this.getPagedData(this.getSortedData([...this.data])));
+      return mergedData;
     }));
   }
 
@@ -69,10 +72,10 @@ export class MatTableDataSource extends DataSource<MatTableItem> {
       return data;
     }
     return data.sort((a, b) => {
-      const isAsc = this.sort.direction === 'desc';
+      const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
         case 'id': return compare(a.name, b.name, isAsc);
-        case 'date': return compare(a.date, b.date, isAsc);
+        case 'date': return compare(a.dateTime, b.dateTime, isAsc);
         case 'status': return compare(+a.status, +b.status, isAsc);
         case 'user': return compare(+a.user, +b.user, isAsc);
         case 'userSystem': return compare(+a.userSystem, +b.userSystem, isAsc);
@@ -82,18 +85,10 @@ export class MatTableDataSource extends DataSource<MatTableItem> {
   }
 
   private getFilteredData(data: MatTableItem[]){
-    this.data.slice().filter((item :MatTableItem)=>{
-        const searchStr = item.id;
-        return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
+    return data.slice().filter((item :MatTableItem)=>{
+        const searchStr = item["id"];
+        return searchStr==undefined?"false" : searchStr.indexOf("search".toLowerCase()) !== -1;
       })
-  }
-
-  get filter(): string {
-    return this._filterChange.value;
-  }
-
-  set filter(filter: string) {
-    this._filterChange.next(filter);
   }
 
   filteredData: MatTableItem[] = [];
