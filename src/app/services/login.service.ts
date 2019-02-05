@@ -17,9 +17,11 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class LoginService {
-  allStatusUrl = 'http://10.2.14.43:9093/demo/all';
-  loginUrl = 'http://10.2.14.43:9093/users/login';
-  signUpUrl = 'http://10.2.14.43:9093/users/signUp';
+  socketUrl = 'http://aggregator:9093/socket';
+  allStatusUrl = 'http://aggregator:9093/demo/all';
+  loginUrl = 'http://aggregator:9093/users/login';
+  signUpUrl = 'http://aggregator:9093/users/signUp';
+  
   private handleError: HandleError;
 
   constructor(private http: HttpClient, httpErrorHandler: HttpErrorHandler) { 

@@ -14,18 +14,24 @@ export class MatTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: MatTableDataSource;
-  displayedColumns = ['name', 'userSystem', 'user', 'status', 'date', 'wfDetails'];
+  displayedColumns = ['name', 'userSystem', 'user', 'date', 'status','wfDetails'];
+
+  interval: any;
   
   ngOnInit() {
     this.dataSource = new MatTableDataSource(this.paginator, this.sort, this.crudServiceParam);
     this.refresh();
   }
 
+  ngOnDestroy(){
+    this.stopRefreshing();
+  }
+
   constructor(private crudServiceParam : CrudServiceService,
                    private router: Router){}
  
   refresh(){
-    setInterval(() => {
+    this.interval = setInterval(() => {
       this.updataData();
       this.dataSource._filterChange.next("");
     },1000);
@@ -47,4 +53,8 @@ export class MatTableComponent implements OnInit {
           this.dataSource.data = <MatTableItem[]>logData;
     });
   }
+
+  stopRefreshing() {
+    clearInterval(this.interval);
+   }
 }

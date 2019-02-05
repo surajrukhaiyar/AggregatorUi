@@ -23,17 +23,21 @@ export class WfDetailDialogComponent implements OnInit{
     @ViewChild(MatSort) sort: MatSort;
     dataSource: MatTableDataSource;
     transactionDS: TransactionDataSource;
-    
+    interval : any;
+
     constructor(private crudService : CrudServiceService, private route: ActivatedRoute){}
 
     ngOnInit() {
       this.dataSource = new MatTableDataSource(this.paginator, this.sort, this.crudService);
       this.refresh(this.route.snapshot.queryParamMap.get("rowId"));
-      
+    }
+
+    ngOnDestroy(){
+      this.stopRefreshing();
     }
 
     refresh(rowId){
-      setInterval(() => {
+      this.interval = setInterval(() => {
         this.updataData();
         this.dataSource._filterChange.next("");
         if(this.dataSource.data != undefined){
@@ -66,11 +70,16 @@ export class WfDetailDialogComponent implements OnInit{
             this.dataSource.data = <MatTableItem[]>logData;
       });
     }
+
+    stopRefreshing(){
+        clearInterval(this.interval);
+    }
 }
 
 export class TransactionDataSource extends DataSource<any> {
   connect(): Observable<Transaction[]> {
     return of(transactionData);
   }
+
   disconnect() {}
 }

@@ -21,8 +21,7 @@ export class CrudServiceService {
   dataChange: BehaviorSubject<MatTableItem[]> = new BehaviorSubject<MatTableItem[]>([]);
 
   private handleError: HandleError;
-  allStatusUrl = 'http://10.2.14.43:9093/demo/all';
-  // allStatusUrl = 'http://10.2.14.43:3000';
+  allStatusUrl = 'http://aggregator:9093/demo/all';
  
   constructor(private http : HttpClient, httpErrorHandler: HttpErrorHandler) {
     this.handleError = httpErrorHandler.createHandleError('LoginService')
